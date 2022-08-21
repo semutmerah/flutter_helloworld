@@ -9,92 +9,92 @@ on:
       - '*'
 
 jobs:
-  # analyze-code:
-  #   runs-on: ubuntu-latest
+  analyze-code:
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: 📚 Git Checkout
-  #       uses: actions/checkout@v3
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
 
-  #     - uses: subosito/flutter-action@v2.6.1
-  #       with:
-  #         flutter-version: '3.0.5'
-  #         channel: 'stable'
-  #         cache: true
+      - uses: subosito/flutter-action@v2.6.1
+        with:
+          flutter-version: '3.0.5'
+          channel: 'stable'
+          cache: true
 
-  #     - name: Cache pub dependencies
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: ${{ env.FLUTTER_HOME }}/.pub-cache
-  #         key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock','**/pubspec.yaml') }}
-  #         restore-keys: ${{ runner.os }}-pub-
+      - name: Cache pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.FLUTTER_HOME }}/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock','**/pubspec.yaml') }}
+          restore-keys: ${{ runner.os }}-pub-
 
-  #     - name: Download pub dependencies
-  #       run: flutter pub get
+      - name: Download pub dependencies
+        run: flutter pub get
       
-  #     - name: ✨ Check Formatting
-  #       run: flutter format --set-exit-if-changed lib test
+      - name: ✨ Check Formatting
+        run: flutter format --set-exit-if-changed lib test
 
-  #     - name: 🕵️ Analyze
-  #       run: flutter analyze lib test
+      - name: 🕵️ Analyze
+        run: flutter analyze lib test
 
-  # running-unit-test:
-  #   runs-on: ubuntu-latest
-  #   needs: analyze-code
+  running-unit-test:
+    runs-on: ubuntu-latest
+    needs: analyze-code
 
-  #   steps:
-  #     - name: 📚 Git Checkout
-  #       uses: actions/checkout@v3
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
 
-  #     - uses: subosito/flutter-action@v2.6.1
-  #       with:
-  #         flutter-version: '3.0.5'
-  #         channel: 'stable'
-  #         cache: true
+      - uses: subosito/flutter-action@v2.6.1
+        with:
+          flutter-version: '3.0.5'
+          channel: 'stable'
+          cache: true
 
-  #     - name: Cache pub dependencies
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: ${{ env.FLUTTER_HOME }}/.pub-cache
-  #         key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock','**/pubspec.yaml') }}
-  #         restore-keys: ${{ runner.os }}-pub-
+      - name: Cache pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.FLUTTER_HOME }}/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock','**/pubspec.yaml') }}
+          restore-keys: ${{ runner.os }}-pub-
 
-  #     - name: Download pub dependencies
-  #       run: flutter pub get
+      - name: Download pub dependencies
+        run: flutter pub get
 
-  #     - name: Execute unit test
-  #       run: flutter test test/hello_test.dart
+      - name: Execute unit test
+        run: flutter test test/hello_test.dart
 
-  # running-widget-test:
-  #   runs-on: ubuntu-latest
-  #   needs: analyze-code
+  running-widget-test:
+    runs-on: ubuntu-latest
+    needs: analyze-code
 
-  #   steps:
-  #     - name: 📚 Git Checkout
-  #       uses: actions/checkout@v3
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
 
-  #     - uses: subosito/flutter-action@v2.6.1
-  #       with:
-  #         flutter-version: '3.0.5'
-  #         channel: 'stable'
-  #         cache: true
+      - uses: subosito/flutter-action@v2.6.1
+        with:
+          flutter-version: '3.0.5'
+          channel: 'stable'
+          cache: true
 
-  #     - name: Cache pub dependencies
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: ${{ env.FLUTTER_HOME }}/.pub-cache
-  #         key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock','**/pubspec.yaml') }}
-  #         restore-keys: ${{ runner.os }}-pub-
+      - name: Cache pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.FLUTTER_HOME }}/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock','**/pubspec.yaml') }}
+          restore-keys: ${{ runner.os }}-pub-
 
-  #     - name: Download pub dependencies
-  #       run: flutter pub get
+      - name: Download pub dependencies
+        run: flutter pub get
 
-  #     - name: Execute widget test
-  #       run: flutter test test/widget_test.dart
+      - name: Execute widget test
+        run: flutter test test/widget_test.dart
 
   running-integration-test:
     runs-on: ubuntu-latest
-    # needs: analyze-code
+    needs: analyze-code
 
     steps:
       - name: 📚 Git Checkout
