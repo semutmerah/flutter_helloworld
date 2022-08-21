@@ -44,3 +44,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Service account key
+firebase-sa-key.json
+
+# Other
+build_integration_test.sh
