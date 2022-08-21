@@ -18,3 +18,40 @@ jobs:
 
       - name: list dir
         run: ls -la
+
+      - uses: subosito/flutter-action@v2.6.1
+        with:
+          flutter-version: '3.0.5'
+          channel: 'stable'
+      
+      - run: flutter --version
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.FLUTTER_HOME }}/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock','**/pubspec.yaml') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Download pub dependencies
+        run: flutter pub get
+      
+      - name: ✨ Check Formatting
+        run: flutter format --set-exit-if-changed lib test
+
+      - name: 🕵️ Analyze
+        run: flutter analyze lib test
+
+  running-unit-test:
+    runs-on: ubuntu-latest
+    needs: build-dependencies
+
+    steps:
+      - run: ls -la
+
+  running-widget-test:
+    runs-on: ubuntu-latest
+    needs: build-dependencies
+
+    steps:
+      - run: ls -la

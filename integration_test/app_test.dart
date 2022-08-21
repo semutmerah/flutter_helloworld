@@ -6,8 +6,7 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('end-to-end test', () {
-    testWidgets('Test helloworld app',
-        (tester) async {
+    testWidgets('Test helloworld app', (tester) async {
       app.main();
       await tester.pumpAndSettle();
 
