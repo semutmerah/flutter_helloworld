@@ -21,7 +21,14 @@ $ flutter test test/hello_test.dart
 ### Widget Test
 
 ```
+$ flutter test test/widget_test.dart
+```
+
+### Integration Test
+Make sure to spawn one emulator / connect one mobile device before running integration test
+
+```
 $ flutter clean
 $ flutter pub get
-$ flutter test test/widget_test.dart
+$ flutter test integration_test/
 ```
