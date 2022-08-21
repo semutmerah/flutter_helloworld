@@ -1,0 +1,141 @@
+name: Run Tests During Pull Requests and Pushing to Main
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  analyze-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
+
+      - uses: subosito/flutter-action@v2.6.1
+        with:
+          flutter-version: '3.0.5'
+          channel: 'stable'
+          cache: true
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.FLUTTER_HOME }}/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock','**/pubspec.yaml') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Download pub dependencies
+        run: flutter pub get
+      
+      - name: ✨ Check Formatting
+        run: flutter format --set-exit-if-changed lib test
+
+      - name: 🕵️ Analyze
+        run: flutter analyze lib test
+
+  running-unit-test:
+    runs-on: ubuntu-latest
+    needs: analyze-code
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
+
+      - uses: subosito/flutter-action@v2.6.1
+        with:
+          flutter-version: '3.0.5'
+          channel: 'stable'
+          cache: true
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.FLUTTER_HOME }}/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock','**/pubspec.yaml') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Download pub dependencies
+        run: flutter pub get
+
+      - name: Execute unit test
+        run: flutter test test/hello_test.dart
+
+  running-widget-test:
+    runs-on: ubuntu-latest
+    needs: analyze-code
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
+
+      - uses: subosito/flutter-action@v2.6.1
+        with:
+          flutter-version: '3.0.5'
+          channel: 'stable'
+          cache: true
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.FLUTTER_HOME }}/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock','**/pubspec.yaml') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Download pub dependencies
+        run: flutter pub get
+
+      - name: Execute widget test
+        run: flutter test test/widget_test.dart
+
+  running-integration-test:
+    runs-on: ubuntu-latest
+    needs: analyze-code
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
+    
+      - uses: subosito/flutter-action@v2.6.1
+        with:
+          flutter-version: '3.0.5'
+          channel: 'stable'
+          cache: true
+
+      - name: Auth Gcloud SDK
+        id: 'auth'
+        uses: 'google-github-actions/auth@v0.8.0'
+        with:
+          credentials_json: '${{ secrets.FIREBASE_SA_KEY }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0.6.0'
+
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.FLUTTER_HOME }}/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock','**/pubspec.yaml') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Download pub dependencies
+        run: flutter pub get
+
+      - name: Build integration test apk
+        run: |
+          pushd android
+          flutter build apk
+          ./gradlew app:assembleAndroidTest
+          ./gradlew app:assembleDebug -Ptarget=integration_test/app_test.dart
+          popd
+      
+      - name: Execute integration test
+        run: |
+          gcloud firebase test android run --type instrumentation --app build/app/outputs/apk/debug/app-debug.apk --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk --timeout 5m --results-bucket=helloworld-results

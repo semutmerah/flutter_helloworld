@@ -1,12 +1,12 @@
 # hello_world
 
 This hello_world project is my own idea of having a very simple flutter project that cover the possible best practices:
-- Unit Test
-- Widget Test
-- Integration Test
-- CI
-- CD
-- Monitoring
+- Unit Test :white_check_mark:
+- Widget Test :white_check_mark:
+- Integration Test :white_check_mark:
+- CI, with integration test connected to Firebase Test Lab :white_check_mark:
+- CD (WIP)
+- Monitoring (WIP)
 
 ## How To Execute Test Locally
 
