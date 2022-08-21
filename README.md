@@ -1,16 +1,27 @@
 # hello_world
 
-A new Flutter project.
+This hello_world project is my own idea of having a very simple flutter project that cover the possible best practices:
+- Unit Test
+- Widget Test
+- Integration Test
+- CI
+- CD
+- Monitoring
 
-## Getting Started
+## How To Execute Test Locally
 
-This project is a starting point for a Flutter application.
+This project comes with tests that cover from unit test, widget test, and integration test
 
-A few resources to get you started if this is your first Flutter project:
+### Unit Test
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```
+$ flutter test test/hello_test.dart
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Widget Test
+
+```
+$ flutter clean
+$ flutter pub get
+$ flutter test test/widget_test.dart
+```
