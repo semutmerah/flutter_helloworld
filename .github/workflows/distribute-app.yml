@@ -36,18 +36,20 @@ jobs:
           cache: true
 
       - name: Cache pub dependencies
+        id: cache-pubspec-dependencies
         uses: actions/cache@v3
         with:
           path: | 
             ${{ env.FLUTTER_HOME }}/.pub-cache
-            .dart_tool
-            .packages
-            .flutter-plugins
-            .flutter-plugins-dependencies
+            **/.dart_tool
+            **/.packages
+            **/.flutter-plugins
+            **/.flutter-plugins-dependencies
           key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock','**/pubspec.yaml') }}
           restore-keys: ${{ runner.os }}-pub-
 
       - name: Download pub dependencies
+        if: steps.cache-pubspec-dependencies.outputs.cache-hit != 'true'
         run: flutter pub get
 
       - name: Build Android APK
