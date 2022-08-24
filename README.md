@@ -5,7 +5,7 @@ This hello_world project is my own idea of having a very simple flutter project 
 - Widget Test :white_check_mark:
 - Integration Test :white_check_mark:
 - CI, with integration test connected to Firebase Test Lab :white_check_mark:
-- CD, using fastlane + Firebase App Distribution (WIP)
+- CD, send to Firebase App Distribution (Android only, because I don't enroll to apple developer) :white_check_mark:
 - Monitoring (WIP)
 
 ## How To Execute Test Locally
