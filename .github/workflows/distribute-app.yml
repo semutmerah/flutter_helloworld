@@ -1,9 +1,9 @@
 name: Deploy App to Firebase App Distribution
 
 on:
-  pull_request:
-    branches:
-      - '*'
+  push:
+    tags:        
+      - v*.*
 
 jobs:
   distribute-android:
