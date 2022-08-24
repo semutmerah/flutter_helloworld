@@ -16,6 +16,12 @@ jobs:
       - name: 📚 Git Checkout
         uses: actions/checkout@v3
 
+      - name: Create config file from Secret
+        run: | 
+          echo $FIREBASE_OPTIONS | base64 -d > lib/firebase_options.dart
+        env:
+          FIREBASE_OPTIONS: ${{ secrets.FIREBASE_OPTIONS_BASE64 }}
+
       - uses: subosito/flutter-action@v2.6.1
         with:
           flutter-version: '3.0.5'
@@ -73,6 +79,12 @@ jobs:
       - name: 📚 Git Checkout
         uses: actions/checkout@v3
 
+      - name: Create config file from Secret
+        run: | 
+          echo $FIREBASE_OPTIONS | base64 -d > lib/firebase_options.dart
+        env:
+          FIREBASE_OPTIONS: ${{ secrets.FIREBASE_OPTIONS_BASE64 }}
+
       - uses: subosito/flutter-action@v2.6.1
         with:
           flutter-version: '3.0.5'
@@ -99,6 +111,14 @@ jobs:
     steps:
       - name: 📚 Git Checkout
         uses: actions/checkout@v3
+
+      - name: Create config file from Secret
+        run: | 
+          echo $GS_JSON | base64 -d > android/app/google-services.json
+          echo $FIREBASE_OPTIONS | base64 -d > lib/firebase_options.dart
+        env:
+          GS_JSON: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+          FIREBASE_OPTIONS: ${{ secrets.FIREBASE_OPTIONS_BASE64 }}
     
       - uses: subosito/flutter-action@v2.6.1
         with:

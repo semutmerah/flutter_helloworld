@@ -48,5 +48,11 @@ app.*.map.json
 # Service account key
 firebase-sa-key.json
 
+# Firebase related
+lib/firebase_options.dart
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+ios/firebase_app_id_file.json
+
 # Other
 build_integration_test.sh

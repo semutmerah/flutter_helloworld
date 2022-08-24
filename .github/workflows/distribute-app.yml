@@ -1,0 +1,65 @@
+name: Deploy App to Firebase App Distribution
+
+on:
+  push:
+    tags:        
+      - v*.*
+
+jobs:
+  distribute-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
+
+      - name: Create config file from Secret
+        run: | 
+          echo $GS_JSON | base64 -d > android/app/google-services.json
+          echo $FIREBASE_OPTIONS | base64 -d > lib/firebase_options.dart
+          echo $FIREBASE_APP_DISTRI_SA_KEY | base64 -d > service-key.json
+        env:
+          GS_JSON: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+          FIREBASE_OPTIONS: ${{ secrets.FIREBASE_OPTIONS_BASE64 }}
+          FIREBASE_APP_DISTRI_SA_KEY: ${{ secrets.FIREBASE_SA_KEY_APP_DISTRI_BASE64 }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v3.3.0
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - uses: subosito/flutter-action@v2.6.1
+        with:
+          flutter-version: '3.0.5'
+          channel: 'stable'
+          cache: true
+
+      - name: Cache pub dependencies
+        id: cache-pubspec-dependencies
+        uses: actions/cache@v3
+        with:
+          path: | 
+            ${{ env.FLUTTER_HOME }}/.pub-cache
+            **/.dart_tool
+            **/.packages
+            **/.flutter-plugins
+            **/.flutter-plugins-dependencies
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock','**/pubspec.yaml') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Download pub dependencies
+        if: steps.cache-pubspec-dependencies.outputs.cache-hit != 'true'
+        run: flutter pub get
+
+      - name: Build Android APK
+        run: flutter build apk --build-number ${{ github.run_number }} --debug
+
+      - name: Upload debug build to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.3.4
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          serviceCredentialsFile: service-key.json
+          releaseNotesFile: release-notes.txt
+          groups: internal
+          file: build/app/outputs/flutter-apk/app-debug.apk
